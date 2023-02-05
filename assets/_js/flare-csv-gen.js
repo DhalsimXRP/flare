@@ -9,6 +9,7 @@ const methodId = {
 	Claim: "0xb2c12192",
 	BatchDelegate: "0xdc4fcda7",
 	Delegate: "0x026e402b",
+	UndelegateAll: "0xb302f393",
 	SetAutoClaiming: "0xe72dcdbb",
 	EnableDelegationAccount: "0xf0977215",
 	Deposit: "0xd0e30db0",
@@ -35,7 +36,8 @@ function render() {
 	}
 	// 入力アドレス取得、API URL生成
 	const waddress = document.getElementById("waddress").value;
-	const flareUrl = `https://flare-explorer.flare.network/api?module=account&action=txlist&address=${waddress}`;
+	const flareUrl = `${flareApi}?module=account&action=txlist&address=${waddress}`;
+	const flareTokenUrl = `${flareApi}?module=account&action=tokentx&address=${waddress}`;
 	// アドレスの文字数が42文字未満の時はアラート
 	if (waddress.length >= 42) {
 		// Flare APIからトランザクションデータ取得
@@ -126,6 +128,7 @@ function render() {
 										break;
 									case "BatchDelegate":
 									case "Delegate":
+									case "UndelegateAll":
 									case "SetAutoClaiming":
 									case "EnableDelegationAccount":
 									case "Deposit":
