@@ -14,6 +14,7 @@ const csvSortMore = ["Timestamp", "Method", "Source", "Base", "Volume", "Counter
 const methodId = {
 	Claim: ["0xb2c12192", "0xb2af870a"],
 	AutoClaim: ["0x6a761202", "0x8dc305fa"],
+	logOhterClaim: ["0x6ec68517"],
 	logAutoClaim: ["0xddf252ad"],
 	BatchDelegate: ["0xdc4fcda7"],
 	Delegate: ["0x026e402b"],
@@ -25,7 +26,6 @@ const methodId = {
 	Withdraw: ["0x2e1a7d4d"],
 	SetClaimExecutors: ["0x9119c494"],
 	Transfer: ["0x"],
-	logOhterClaim: ["0x6ec68517"],
 };
 // cryptact用action配列
 const actions = ["BUY", "SELL", "PAY", "MINING", "SENDFEE", "REDUCE", "BONUS", "LENDING", "STAKING", "CASH", "BORROW", "RETURN", "LOSS"];
