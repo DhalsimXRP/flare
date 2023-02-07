@@ -63,6 +63,14 @@ function getJsonBb(tx) {
 	return fetch(bbPriceAPI).then((response) => response.json());
 }
 
+function delayReturn(data) {
+	return new Promise((resolve) => {
+		setTimeout(() => {
+			resolve(data);
+		}, 100);
+	});
+}
+
 function getData(waddress) {
 	return getJsonTx(waddress)
 		.then((jsonTx) => {
@@ -71,7 +79,7 @@ function getData(waddress) {
 			const requests = jsonTxResult.map((tx) => {
 				return getJsonDetailTx(tx.hash).then((jsonDetailTx) => {
 					tx.logs = jsonDetailTx.result.logs;
-					return tx;
+					return delayReturn(tx);
 				});
 			});
 			return Promise.all(requests).then((results) => {
@@ -227,7 +235,7 @@ function getData(waddress) {
 							}
 						});
 					}
-					return tx;
+					return delayReturn(tx);
 				});
 			});
 			return Promise.all(requests).then((results) => {
