@@ -13,7 +13,7 @@ const csvSortMore = ["Timestamp", "Method", "Source", "Base", "Volume", "Counter
 // method判別用obj 要確認
 const methodId = {
 	Claim: ["0xb2c12192", "0xb2af870a"],
-	AutoClaim: ["0x6a761202"],
+	AutoClaim: ["0x6a761202", "0x8dc305fa"],
 	logAutoClaim: ["0xddf252ad"],
 	BatchDelegate: ["0xdc4fcda7"],
 	Delegate: ["0x026e402b"],
@@ -231,7 +231,7 @@ function getData(waddress) {
 			});
 		})
 		.then((sortAllTx) => {
-			// console.log(sortAllTx);
+			console.log(sortAllTx);
 			tableRender(sortAllTx);
 		});
 }
