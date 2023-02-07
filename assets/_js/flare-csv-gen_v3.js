@@ -137,8 +137,8 @@ function getData(waddress) {
 					});
 				}
 				// methodに合わせてvolume設定
-				console.log(tx.Method);
-				console.log(tx);
+				// console.log(tx.Method);
+				// console.log(tx);
 				switch (tx.Method) {
 					case "Claim":
 						if (tx.logs[0]) {
