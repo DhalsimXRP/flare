@@ -104,9 +104,9 @@ function getData(waddress) {
 				}
 			});
 		})
-		.then((allTx) => {
+		.then((margeAllTx) => {
 			// データ整形、
-			allTx.forEach((tx) => {
+			margeAllTx.forEach((tx) => {
 				// タイムスタンプをミリ秒変換
 				const time = new Date(tx.timeStamp * 1000);
 				// ミリ秒からYMDHMS生成
@@ -206,12 +206,11 @@ function getData(waddress) {
 				}
 			});
 			// unixtimeで並び替え
-			allTx.sort(function (a, b) {
+			margeAllTx.sort(function (a, b) {
 				return b.blockNumber - a.blockNumber;
 			});
-
 			// console.log(allTx);
-			const requests = allTx.map((tx) => {
+			const requests = margeAllTx.map((tx) => {
 				// console.log(tx);
 				return getJsonBb(tx).then((candlJson) => {
 					if (candlJson.success == 1) {
@@ -227,21 +226,22 @@ function getData(waddress) {
 				});
 			});
 			return Promise.all(requests).then((results) => {
-				allTx = results;
-				return allTx;
+				// console.log(results);
+				return results;
 			});
 		})
-		.then((allTx) => {
-			// console.log(allTx);
-			tableRender(allTx);
+		.then((sortAllTx) => {
+			// console.log(sortAllTx);
+			tableRender(sortAllTx);
 		});
 }
 
 // 一覧表示
-function tableRender(allTx) {
+function tableRender(sortAllTx) {
 	// console.log(tx);
 	//レンダリング
-	allTx.forEach((tx) => {
+	allTx = sortAllTx;
+	sortAllTx.forEach((tx) => {
 		// console.log(tx);
 		const tr = document.createElement("tr");
 		let method = document.createElement("td");
