@@ -137,6 +137,8 @@ function getData(waddress) {
 					});
 				}
 				// methodに合わせてvolume設定
+				console.log(tx.Method);
+				console.log(tx);
 				switch (tx.Method) {
 					case "Claim":
 						if (tx.logs[0]) {
@@ -155,6 +157,9 @@ function getData(waddress) {
 								}
 							});
 						}
+						break;
+					case "SetAutoClaiming":
+						tx.Fee = tx.Fee + division10p18fixed9(tx.value);
 						break;
 					case "AutoClaim":
 						tx.Volume = division10p18fixed9(tx.value);
