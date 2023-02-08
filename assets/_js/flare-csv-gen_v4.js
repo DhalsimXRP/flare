@@ -1,3 +1,22 @@
+// カラーモード
+const btn = document.querySelector(".mode-btn");
+// チェックした時の挙動
+btn.addEventListener("change", () => {
+	if (btn.checked == true) {
+		// ダークモード
+		document.body.classList.remove("light-theme");
+		document.body.classList.add("dark-theme");
+	} else {
+		// ライトモード
+		document.body.classList.remove("dark-theme");
+		document.body.classList.add("light-theme");
+	}
+});
+if (window.matchMedia("(prefers-color-scheme: dark)").matches == true) {
+	btn.click();
+	console.log("ダークモード");
+}
+
 //// 初期設定
 // bind
 const dataTable = document.getElementById("transaction-data"),
@@ -325,6 +344,7 @@ function tableRender() {
 			case "Claim":
 			case "AutoClaim":
 				method.classList.add("bg-warning");
+				method.classList.add("text-dark");
 				break;
 			case "Deposit":
 				method.classList.add("bg-success");
@@ -338,6 +358,7 @@ function tableRender() {
 				break;
 			default:
 				method.classList.add("bg-light");
+				method.classList.add("text-dark");
 		}
 		// 日付
 		let date = document.createElement("td");
