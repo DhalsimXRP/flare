@@ -12,7 +12,7 @@ btn.addEventListener("change", () => {
 		document.body.classList.add("light-theme");
 	}
 });
-if (window.matchMedia("(prefers-color-scheme: dark)").matches == light) {
+if (window.matchMedia("(prefers-color-scheme: light)").matches == light) {
 	btn.click();
 }
 
