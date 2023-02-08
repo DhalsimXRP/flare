@@ -14,7 +14,6 @@ btn.addEventListener("change", () => {
 });
 if (window.matchMedia("(prefers-color-scheme: dark)").matches == true) {
 	btn.click();
-	console.log("ダークモード");
 }
 
 //// 初期設定
