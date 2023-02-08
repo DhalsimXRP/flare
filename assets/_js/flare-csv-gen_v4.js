@@ -1,13 +1,22 @@
 //// 初期設定
 // bind
-const dataTable = document.getElementById("transaction-data");
-const loading = document.getElementById("loading");
-const dlbtn = document.getElementById("download");
-const dlbtnM = document.getElementById("download-more");
+const dataTable = document.getElementById("transaction-data"),
+	loading = document.getElementById("loading"),
+	dlbtn = document.getElementById("download"),
+	dlbtnM = document.getElementById("download-more"),
+	inputWaddress = document.getElementById("waddress"),
+	inputStartDate = document.getElementById("starttimestamp"),
+	inputEndDate = document.getElementById("endtimestamp"),
+	clearStartDate = document.getElementById("clearStartDate"),
+	clearEndDate = document.getElementById("clearEndDate");
 
 // グローバル変数トランザクション格納用
-let allTx, waddress;
-const delayMS = 50;
+let allTx,
+	waddress,
+	starttimestamp = "",
+	endtimestamp = "";
+const delayMS = 50,
+	minDate = "2023-01-10";
 // csv ソート用配列
 const csvSort = ["Timestamp", "Action", "Source", "Base", "Volume", "Price", "Counter", "Fee", "FeeCcy", "Comment"];
 const csvSortMore = ["Timestamp", "Method", "Source", "Base", "Volume", "Counter", "Fee", "FeeCcy", "hash", "gas", "gasPrice", "gasUsed", "priceAverage", "FeeJPY", "VolumeJPY"];
@@ -34,22 +43,73 @@ const actions = ["BUY", "SELL", "PAY", "MINING", "SENDFEE", "REDUCE", "BONUS", "
 const flareApi = "https://flare-explorer.flare.network/api";
 const bbPriceUrl = "https://public.bitbank.cc/flr_jpy/candlestick/1min/";
 
+// data range fix
+inputStartDate.addEventListener("change", () => {
+	startDate();
+});
+clearStartDate.addEventListener("click", () => {
+	inputStartDate.value = "";
+	startDate();
+});
+function startDate() {
+	if (inputStartDate.value) {
+		inputEndDate.min = inputStartDate.value;
+	} else {
+		inputEndDate.min = minDate;
+	}
+}
+inputEndDate.addEventListener("change", () => {
+	endDate();
+});
+clearEndDate.addEventListener("click", () => {
+	inputEndDate.value = "";
+	endDate();
+});
+function endDate() {
+	if (inputEndDate.value) {
+		inputStartDate.max = inputEndDate.value;
+	} else {
+		inputStartDate.max = "";
+	}
+}
+
 // start
 function start() {
+	// 入力アドレス取得
+	waddress = inputWaddress.value;
+	// 日付確認
+	let starttimestampValue = inputStartDate.value;
+	let endtimestampValue = inputEndDate.value;
+	if (starttimestampValue) {
+		// console.log(starttimestampValue);
+		let startUnixtime = convertToUnixTime(starttimestampValue);
+		starttimestamp = "&starttimestamp=" + startUnixtime;
+		// console.log(starttimestamp);
+	}
+	if (endtimestampValue) {
+		// console.log(endtimestampValue);　終了は指定日中、unixtimesec１日分追加
+		let endUnixtime = convertToUnixTime(endtimestampValue) + 60 * 60 * 24;
+		endtimestamp = "&endtimestamp=" + endUnixtime;
+		// console.log(endtimestamp);
+	}
+	// ウォレット文字数確認
+	if (waddress.length == 42) {
+		getTx(waddress);
+	} else {
+		alert("Wrong address length.\nCheck wallet address.");
+	}
+}
+
+// get transaction & detail log
+function getTx(waddress) {
 	// テーブル初期化
 	while (dataTable.firstChild) {
 		dataTable.removeChild(dataTable.firstChild);
 	}
 	// ロード表示
 	loading.classList.remove("d-none");
-	// 入力アドレス取得
-	waddress = document.getElementById("waddress").value;
-	getTx(waddress);
-}
 
-// get transaction & detail log
-function getTx(waddress) {
-	fetch(`${flareApi}?module=account&action=txlist&address=${waddress}`)
+	fetch(`${flareApi}?module=account&action=txlist&address=${waddress}${starttimestamp}${endtimestamp}`)
 		.then((response) => response.json())
 		.then((jsonTx) => {
 			const jsonTxResult = jsonTx.result;
@@ -79,7 +139,7 @@ function getTx(waddress) {
 
 // get token transfer
 function getTt(waddress, jsonTxResult) {
-	fetch(`${flareApi}?module=account&action=tokentx&address=${waddress}`)
+	fetch(`${flareApi}?module=account&action=tokentx&address=${waddress}${starttimestamp}${endtimestamp}`)
 		.then((response) => response.json())
 		.then((jsonTt) => {
 			const jsonTtResult = jsonTt.result;
@@ -394,6 +454,11 @@ function convertToJapanDateTime(unixTime, output) {
 // hex to dicimal
 function hexConvert(hex) {
 	return parseInt(hex, 16);
+}
+
+// YYYY-MM-DD to unixtime
+function convertToUnixTime(date) {
+	return Math.floor(new Date(date).getTime() / 1000);
 }
 
 // csv download
