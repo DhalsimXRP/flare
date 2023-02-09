@@ -64,7 +64,7 @@
 	</head>
 	<body class="dark-theme">
 		<div class="container">
-			<h1 class="text-center fs-1 p-5">
+			<h1 class="text-center fs-1 py-5">
 				<span class="logo">
 					<svg id="b" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 975.98">
 						<g id="c">
@@ -83,21 +83,21 @@
 					<div class="row">
 						<div class="col-12 col-lg-6">
 							<div class="input-group my-3">
-								<span class="input-group-text fs-3 col-2 justify-content-center">From</span>
-								<input type="date" min="2023-01-10" class="form-control fs-3 col-8" id="starttimestamp" />
-								<button class="btn btn-warning fs-3 col-2" id="clearStartDate">clear</button>
+								<span class="input-group-text fs-3 col-3 justify-content-center">From</span>
+								<input type="date" min="2023-01-10" class="form-control fs-3 col-7" id="starttimestamp" />
+								<button class="btn btn-warning fs-3 col-2" id="clearStartDate"><span class="material-symbols-outlined">backspace</span></button>
 							</div>
 						</div>
 						<div class="col-12 col-lg-6">
 							<div class="input-group my-3 col-12 col-lg-6">
-								<span class="input-group-text fs-3 col-2 justify-content-center">To</span>
-								<input type="date" min="2023-01-10" class="form-control fs-3 col-8" id="endtimestamp" />
-								<button class="btn btn-warning fs-3 col-2" id="clearEndDate">Clear</button>
+								<span class="input-group-text fs-3 col-3 justify-content-center">To</span>
+								<input type="date" min="2023-01-10" class="form-control fs-3 col-7" id="endtimestamp" />
+								<button class="btn btn-warning fs-3 col-2" id="clearEndDate"><span class="material-symbols-outlined">backspace</span></button>
 							</div>
 						</div>
 					</div>
 				</div>
-				<button onclick="start();" class="btn btn-warning fs-3 my-3">Data generation<span class="material-symbols-outlined mx-1">data_check</span></button>
+				<button onclick="start();" class="btn btn-warning fs-3 my-3 px-5"><span class="material-symbols-outlined mx-1">data_check</span>Data generation</button>
 			</div>
 
 			<div class="table-responsive overflow-auto my-5">
@@ -125,8 +125,8 @@
 				</button>
 			</div>
 			<div class="text-center">
-				<button id="download" class="btn btn-secondary fs-3 m-5 disabled" onclick="downloadCSVforCT()">csv for cryptact<span class="material-symbols-outlined mx-1">download</span></button>
-				<button id="download-more" class="btn btn-secondary fs-3 m-5 disabled" onclick="downloadCSVMore()">csv JPY data<span class="material-symbols-outlined mx-1">download</span></button>
+				<button id="download" class="btn btn-secondary fs-3 mx-5 px-5 disabled" onclick="downloadCSVforCT()"><span class="material-symbols-outlined me-2">download</span>csv for cryptact</button>
+				<button id="download-more" class="btn btn-secondary fs-3 mx-5 px-5 disabled" onclick="downloadCSVMore()"><span class="material-symbols-outlined me-2">download</span>csv JPY data</button>
 			</div>
 			<div class="text-center my-5">
 				<a href="https://xumm.app/detect/request:rN3EVD27CNwY1QgJpWK4HQ9Qwg5X8H2EQs" target="_blank" rel="noreferrer"><img id="xumm-donate-button" class="donate-button css-0" src="https://donate.xumm.community/xummDonate.svg" alt="Donate via XUMM" /></a>
