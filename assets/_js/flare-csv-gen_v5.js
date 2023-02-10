@@ -535,13 +535,13 @@ function dlBtnActive() {
 		clearEndDate.classList.remove("btn-secondary");
 		clearEndDate.classList.add("btn-warning");
 		clearEndDate.classList.remove("disabled");
-	}, 2000);
+	}, 1000);
 	setTimeout(() => {
 		// progress reset
 		progressBar.setAttribute("aria-valuenow", "0");
 		progressBar.style.width = "0%";
 		loadingPercent.innerHTML = "0%";
-	}, 2500);
+	}, 1500);
 }
 
 // 割算
