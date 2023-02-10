@@ -203,6 +203,7 @@ function getTt(waddress, allTx, blockNumArr) {
 	fetch(`${flareApi}?module=account&action=tokentx&address=${waddress}${starttimestamp}${endtimestamp}`)
 		.then((response) => response.json())
 		.then((jsonTt) => {
+			let ttPeriodCount = 0;
 			const jsonTtResult = jsonTt.result;
 			// console.log(jsonTtResult);
 			jsonTtResult.forEach((tt) => {
@@ -210,13 +211,16 @@ function getTt(waddress, allTx, blockNumArr) {
 				// console.log(tt.blockNumber);
 				// 情報追加・データ格納
 				// 指定期間内 & block Numberが被っていない & tokenSYmbolが WFLR or FLRの時場合に追加
-				if (Number(tt.timeStamp) >= Number(startUnixtime) && Number(tt.timeStamp) <= Number(endUnixtime) && blockNumArr.indexOf(tt.blockNumber) === -1 && (tt.tokenSymbol == "FLR" || tt.tokenSymbol == "WFLR")) {
+				let targetJudge = timeJudge(tt.timeStamp, startUnixtime, startUnixtime);
+				// console.log(targetJudge);
+				if (targetJudge) {
 					allTx.push(tt);
 					blockNumArr.push(tt.blockNumber);
+					ttPeriodCount++;
 				}
 			});
 			// tx count view
-			for (let i = 1; i <= jsonTtResult.length; i++) {
+			for (let i = 1; i <= ttPeriodCount; i++) {
 				setTimeout(() => {
 					numTt.textContent = i;
 				}, i * delayCount);
@@ -501,6 +505,28 @@ function tableRender(tx) {
 	dataTable.prepend(tr);
 }
 
+// token transfer 対象判定
+function timeJudge(timeStamp, starTime, endtime) {
+	// 期間未設定
+	if (!starTime && !endtime) {
+		return true;
+	}
+	// Fromのみの時
+	if (starTime && !endtime && timeStamp >= starTime) {
+		return true;
+	}
+	// Toのみの時
+	if (!starTime && endtime && timeStamp <= endtime) {
+		return true;
+	}
+	// From To両方の時
+	if (starTime && endtime && timeStamp >= starTime && timeStamp <= endtime) {
+		return true;
+	}
+	return false;
+}
+
+// progress bar
 function progress(loadIndex, blockNum) {
 	let percentNum = Math.ceil((loadIndex / blockNum) * 100);
 	let percent = percentNum + "%";
@@ -536,6 +562,7 @@ function dlBtnActive() {
 		clearEndDate.classList.add("btn-warning");
 		clearEndDate.classList.remove("disabled");
 	}, 1000);
+	// progress bar reset
 	setTimeout(() => {
 		// progress reset
 		progressBar.setAttribute("aria-valuenow", "0");
