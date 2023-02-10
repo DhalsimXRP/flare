@@ -208,10 +208,10 @@ function getBb() {
 		tx.Fee = division10p18fixed9(tx.gasPrice * tx.gasUsed);
 		tx.Method = "UNKNOWN";
 		tx.methodId = tx.input.slice(0, 10);
-		// method種を追加
-		for (const [method, midArr] of Object.entries(methodId)) {
-			midArr.forEach((mid) => {
-				if (tx.methodId == mid) {
+		// method種を配列から判別して追加
+		for (const [method, mIdArr] of Object.entries(methodId)) {
+			mIdArr.forEach((mId) => {
+				if (tx.methodId == mId) {
 					tx.Method = method;
 				}
 			});
