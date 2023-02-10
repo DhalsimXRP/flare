@@ -64,6 +64,7 @@ const methodId = {
 	CastVote: ["0x56781388"],
 	Withdraw: ["0x2e1a7d4d"],
 	SetClaimExecutors: ["0x9119c494"],
+	MultiTransfer: ["0x1e89d545", "0x7fb7e3f8"],
 	Transfer: ["0x"],
 };
 // cryptact用action配列
@@ -208,12 +209,13 @@ function getTt(waddress, allTx, blockNumArr) {
 			// console.log(jsonTtResult);
 			jsonTtResult.forEach((tt) => {
 				// console.log(tt);
-				// console.log(tt.blockNumber);
 				// 情報追加・データ格納
 				// 指定期間内 & block Numberが被っていない & tokenSYmbolが WFLR or FLRの時場合に追加
 				let targetJudge = timeJudge(tt.timeStamp, startUnixtime, startUnixtime);
 				// console.log(targetJudge);
-				if (targetJudge) {
+				// 期限内 & block Numberが被っていない ＆ token Symboleが FLR or WFLR
+				// console.log(blockNumArr.indexOf(tt.blockNumber));
+				if (targetJudge && blockNumArr.indexOf(tt.blockNumber) === -1 && (tt.tokenSymbol == "FLR" || tt.tokenSymbol == "WFLR")) {
 					allTx.push(tt);
 					blockNumArr.push(tt.blockNumber);
 					ttPeriodCount++;
