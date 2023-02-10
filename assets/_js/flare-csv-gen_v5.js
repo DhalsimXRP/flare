@@ -141,10 +141,16 @@ function start() {
 		numTt.textContent = "0";
 		numBl.textContent = "0";
 
-		// 読込ボタン無効化
+		// 読込ボタン,日付削除ボタン無効化
 		generate.classList.add("btn-secondary");
 		generate.classList.remove("btn-warning");
 		generate.classList.add("disabled");
+		clearStartDate.classList.add("btn-secondary");
+		clearStartDate.classList.remove("btn-warning");
+		clearStartDate.classList.add("disabled");
+		clearEndDate.classList.add("btn-secondary");
+		clearEndDate.classList.remove("btn-warning");
+		clearEndDate.classList.add("disabled");
 
 		// ダウンロードボタン無効化
 		dlbtnM.classList.add("btn-secondary");
@@ -523,6 +529,12 @@ function dlBtnActive() {
 		generate.classList.remove("btn-secondary");
 		generate.classList.add("btn-warning");
 		generate.classList.remove("disabled");
+		clearStartDate.classList.remove("btn-secondary");
+		clearStartDate.classList.add("btn-warning");
+		clearStartDate.classList.remove("disabled");
+		clearEndDate.classList.remove("btn-secondary");
+		clearEndDate.classList.add("btn-warning");
+		clearEndDate.classList.remove("disabled");
 	}, 2000);
 	setTimeout(() => {
 		// progress reset
