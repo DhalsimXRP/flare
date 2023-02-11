@@ -208,16 +208,20 @@ function getTt(waddress, allTx, blockNumArr) {
 			const jsonTtResult = jsonTt.result;
 			// console.log(jsonTtResult);
 			jsonTtResult.forEach((tt) => {
-				// console.log(tt);
 				// 情報追加・データ格納
 				// 指定期間内 & block Numberが被っていない & tokenSYmbolが WFLR or FLRの時場合に追加
-				let targetJudge = timeJudge(tt.timeStamp, startUnixtime, startUnixtime);
-				// console.log(targetJudge);
+				let targetJudge = timeJudge(tt.timeStamp, startUnixtime, endUnixtime);
+				//console.log(`${targetJudge}:${tt.timeStamp}:${startUnixtime}:${endUnixtime}`);
+				//console.log(tt);
 				// 期限内 & block Numberが被っていない ＆ token Symboleが FLR or WFLR
 				// console.log(blockNumArr.indexOf(tt.blockNumber));
-				if (targetJudge && blockNumArr.indexOf(tt.blockNumber) === -1 && (tt.tokenSymbol == "FLR" || tt.tokenSymbol == "WFLR")) {
-					allTx.push(tt);
-					blockNumArr.push(tt.blockNumber);
+				if (targetJudge) {
+					// 対象データのみtxデータとblock Numberを
+					if (blockNumArr.indexOf(tt.blockNumber) === -1 && (tt.tokenSymbol == "FLR" || tt.tokenSymbol == "WFLR")) {
+						allTx.push(tt);
+						blockNumArr.push(tt.blockNumber);
+					}
+					// 対象期間のtoken transfer数をカウント
 					ttPeriodCount++;
 				}
 			});
