@@ -44,7 +44,7 @@ let allTx = [],
 	endUnixtime = "";
 
 const delayMS = 50,
-	delayCount = 10,
+	delayCount = 20,
 	minDate = "2023-01-10";
 // csv ソート用配列
 const csvSort = ["Timestamp", "Action", "Source", "Base", "Volume", "Price", "Counter", "Fee", "FeeCcy", "Comment"];
