@@ -44,7 +44,7 @@ let allTx = [],
 	endUnixtime = "";
 
 const delayMS = 50,
-	delayCount = 20,
+	delayCount = 10,
 	minDate = "2023-01-10";
 // csv ソート用配列
 const csvSort = ["Timestamp", "Action", "Source", "Base", "Volume", "Price", "Counter", "Fee", "FeeCcy", "Comment"];
@@ -208,8 +208,8 @@ function getTt(waddress, allTx, blockNumArr) {
 			const jsonTtResult = jsonTt.result;
 			// console.log(jsonTtResult);
 			jsonTtResult.forEach((tt) => {
-				// 情報追加・データ格納
-				// 指定期間内 & block Numberが被っていない & tokenSYmbolが WFLR or FLRの時場合に追加
+				//// 情報追加・データ格納
+				// 期間判定
 				let targetJudge = timeJudge(tt.timeStamp, startUnixtime, endUnixtime);
 				//console.log(`${targetJudge}:${tt.timeStamp}:${startUnixtime}:${endUnixtime}`);
 				//console.log(tt);
