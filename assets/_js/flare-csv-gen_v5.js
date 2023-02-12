@@ -434,6 +434,11 @@ function tableRender(tx) {
 	// レンダリング
 	// console.log(tx);
 	const tr = document.createElement("tr");
+	// 日付
+	let date = document.createElement("th");
+	date.classList.add("text-start");
+	date.innerHTML = tx.Timestamp;
+	// Method
 	let method = document.createElement("td");
 	method.innerHTML = tx.Method;
 	method.classList.add("text-center");
@@ -462,10 +467,6 @@ function tableRender(tx) {
 			method.classList.add("bg-light");
 			method.classList.add("text-dark");
 	}
-	// 日付
-	let date = document.createElement("td");
-	date.classList.add("text-start");
-	date.innerHTML = tx.Timestamp;
 	// cryptact用 Action変更セレクト
 	let action = document.createElement("td");
 	let actionSelect = document.createElement("select");
