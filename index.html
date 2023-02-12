@@ -98,10 +98,18 @@
 					</div>
 				</div>
 				<button onclick="start();" class="btn btn-warning fs-3 my-5 px-5" id="generate"><span class="material-symbols-outlined mx-1">data_check</span>Data generation</button>
-				<div class="row mt-2 text-center">
-					<p class="text-center fs-4 col-12 col-lg-3">Transactions:<span id="num-tx">0</span></p>
-					<p class="text-center fs-4 col-12 col-lg-3">Token Transfers:<span id="num-tt">0</span></p>
-					<p class="text-center fs-4 col-12 col-lg-6">Blocks (Target FLR/WFLR):<span id="num-bl">0</span></p>
+				<div class="row text-center m-auto" id="wallet-data">
+					<div class="head col-6 col-lg-2">Balance</div>
+					<div class="col-6 col-lg-2">
+						<span><span id="num-flr">0</span> FLR</span>
+						<span><span id="num-wflr">0</span> WFLR</span>
+					</div>
+					<div class="head col-6 col-lg-2">Transactions</div>
+					<div class="col-6 col-lg-1"><span id="num-tx">0</span></div>
+					<div class="head col-6 col-lg-2">Token Transfers</div>
+					<div class="col-6 col-lg-1"><span id="num-tt">0</span></div>
+					<div class="head col-6 col-lg-1">Blocks</div>
+					<div class="col-6 col-lg-1"><span id="num-bl">0</span></div>
 				</div>
 			</div>
 

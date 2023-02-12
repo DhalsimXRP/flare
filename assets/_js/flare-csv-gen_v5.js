@@ -30,6 +30,8 @@ const generate = document.getElementById("generate"),
 	inputEndDate = document.getElementById("endtimestamp"),
 	clearStartDate = document.getElementById("clearStartDate"),
 	clearEndDate = document.getElementById("clearEndDate"),
+	numFLR = document.getElementById("num-flr"),
+	numWFLR = document.getElementById("num-wflr"),
 	numTx = document.getElementById("num-tx"),
 	numTt = document.getElementById("num-tt"),
 	numBl = document.getElementById("num-bl");
@@ -72,6 +74,7 @@ const actions = ["BUY", "SELL", "PAY", "MINING", "SENDFEE", "REDUCE", "BONUS", "
 // API用
 const flareApi = "https://flare-explorer.flare.network/api";
 const bbPriceUrl = "https://public.bitbank.cc/flr_jpy/candlestick/1min/";
+const caddressWFLR = "0x1D80c49BbBCd1C0911346656B529DF9E5c2F783d";
 
 // data range fix
 inputStartDate.addEventListener("change", () => {
@@ -138,6 +141,8 @@ function start() {
 		}
 
 		// 数値リセット
+		numFLR.textContent = "0";
+		numWFLR.textContent = "0";
 		numTx.textContent = "0";
 		numTt.textContent = "0";
 		numBl.textContent = "0";
@@ -175,6 +180,7 @@ function getTx(waddress, allTx, blockNumArr) {
 	// console.log("get transaction");
 	// console.log(starttimestamp);
 	// console.log(endtimestamp);
+	// transaction
 	fetch(`${flareApi}?module=account&action=txlist&address=${waddress}${starttimestamp}${endtimestamp}`)
 		.then((response) => response.json())
 		.then((jsonTx) => {
@@ -195,6 +201,20 @@ function getTx(waddress, allTx, blockNumArr) {
 				}, i * delayCount);
 			}
 			getTt(waddress, allTx, blockNumArr);
+		});
+	// FLR balance
+	fetch(`${flareApi}?module=account&action=balance&address=${waddress}`)
+		.then((response) => response.json())
+		.then((jsonTx) => {
+			const jsonTxResult = jsonTx.result;
+			numFLR.textContent = division10p18fixed9(jsonTxResult);
+		});
+	// WFLR balance
+	fetch(`${flareApi}?module=account&action=tokenbalance&contractaddress=${caddressWFLR}&address=${waddress}`)
+		.then((response) => response.json())
+		.then((jsonTx) => {
+			const jsonTxResult = jsonTx.result;
+			numWFLR.textContent = division10p18fixed9(jsonTxResult);
 		});
 }
 
@@ -498,8 +518,8 @@ function tableRender(tx) {
 	}
 	volumeJPY.innerHTML = tx.VolumeJPY;
 	// 行に挿入
-	tr.appendChild(method);
 	tr.appendChild(date);
+	tr.appendChild(method);
 	tr.appendChild(action);
 	tr.appendChild(hash);
 	tr.appendChild(volume);
