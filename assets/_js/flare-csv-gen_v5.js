@@ -195,11 +195,7 @@ function getTx(waddress, allTx, blockNumArr) {
 				blockNumArr.push(tx.blockNumber);
 			});
 			// tx count view
-			for (let i = 1; i <= jsonTxResult.length; i++) {
-				setTimeout(() => {
-					numTx.textContent = i;
-				}, i * delayCount);
-			}
+			numTx.textContent = jsonTxResult.length;
 			getTt(waddress, allTx, blockNumArr);
 		});
 	// FLR balance
@@ -246,17 +242,9 @@ function getTt(waddress, allTx, blockNumArr) {
 				}
 			});
 			// tx count view
-			for (let i = 1; i <= ttPeriodCount; i++) {
-				setTimeout(() => {
-					numTt.textContent = i;
-				}, i * delayCount);
-			}
+			numTt.textContent = ttPeriodCount;
 			// block count view
-			for (let i = 1; i <= blockNumArr.length; i++) {
-				setTimeout(() => {
-					numBl.textContent = i;
-				}, i * delayCount);
-			}
+			numBl.textContent = blockNumArr.length;
 			allTxAjust(allTx);
 		});
 }
