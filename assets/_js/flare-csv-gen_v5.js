@@ -196,7 +196,14 @@ function getTx(waddress, allTx, blockNumArr) {
 			});
 			// tx count view
 			numTx.textContent = jsonTxResult.length;
-			getTt(waddress, allTx, blockNumArr);
+			if (allTx.length) {
+				getTt(waddress, allTx, blockNumArr);
+			} else {
+				alert("No Transactions.");
+				// loading表示
+				loading.classList.add("pre-load");
+				return false;
+			}
 		});
 	// FLR balance
 	fetch(`${flareApi}?module=account&action=balance&address=${waddress}`)
@@ -586,6 +593,59 @@ function dlBtnActive() {
 	}, 1500);
 }
 
+// csv download for cryptact
+function downloadCSVforCT() {
+	// csv用データ ディープコピー
+	let txDeepC = JSON.parse(JSON.stringify(allTx));
+	let txSorted = [];
+	txDeepC.forEach((tx) => {
+		const sorted = {};
+		csvSort.forEach((key) => {
+			if (tx.hasOwnProperty(key)) {
+				sorted[key] = tx[key];
+			}
+		});
+		txSorted.push(sorted);
+	});
+	// ファイル名を指定してダウンロード
+	csvDownload(txSorted, "flr-csv-for-cryptact.csv");
+}
+
+// csv download for more
+function downloadCSVMore() {
+	// csv用データ ディープコピー
+	let txDeepC = JSON.parse(JSON.stringify(allTx));
+	let txSorted = [];
+	// 不要項目削除
+	txDeepC.forEach((tx) => {
+		const sorted = {};
+		csvSortMore.forEach((key) => {
+			if (tx.hasOwnProperty(key)) {
+				sorted[key] = tx[key];
+			}
+		});
+		txSorted.push(sorted);
+	});
+	// ファイル名を指定してダウンロード
+	csvDownload(txSorted, "flr-csv-more.csv");
+}
+
+// csv download
+function csvDownload(obj, fileName) {
+	// csvのheader生成
+	const keys = Object.keys(obj[0]);
+	const header = keys.join(",");
+	const rows = obj.map((row) => Object.values(row).join(","));
+	const csv = header + "\n" + rows.join("\n");
+	const blob = new Blob([csv], { type: "text/csv" });
+	// download
+	const dlLink = document.createElement("a");
+	dlLink.href = URL.createObjectURL(blob);
+	dlLink.download = fileName;
+	dlLink.click();
+	dlLink.remove();
+}
+
 // 割算
 function division10p18fixed9(num) {
 	let calc = Number((num / 1000000000).toFixed(9));
@@ -622,57 +682,4 @@ function hexConvert(hex) {
 // YYYY-MM-DD to unixtime
 function convertToUnixTime(date) {
 	return Math.floor(new Date(date).getTime() / 1000);
-}
-
-// csv download
-function csvDownload(obj, fileName) {
-	// csvのheader生成
-	const keys = Object.keys(obj[0]);
-	const header = keys.join(",");
-	const rows = obj.map((row) => Object.values(row).join(","));
-	const csv = header + "\n" + rows.join("\n");
-	const blob = new Blob([csv], { type: "text/csv" });
-	// download
-	const dlLink = document.createElement("a");
-	dlLink.href = URL.createObjectURL(blob);
-	dlLink.download = fileName;
-	dlLink.click();
-	dlLink.remove();
-}
-
-// csv download for cryptact
-function downloadCSVforCT() {
-	// csv用データ ディープコピー
-	let txDeepC = JSON.parse(JSON.stringify(allTx));
-	let txSorted = [];
-	txDeepC.forEach((tx) => {
-		const sorted = {};
-		csvSort.forEach((key) => {
-			if (tx.hasOwnProperty(key)) {
-				sorted[key] = tx[key];
-			}
-		});
-		txSorted.push(sorted);
-	});
-	// ファイル名を指定してダウンロード
-	csvDownload(txSorted, "flr-csv-for-cryptact.csv");
-}
-
-// csv download for more
-function downloadCSVMore() {
-	// csv用データ ディープコピー
-	let txDeepC = JSON.parse(JSON.stringify(allTx));
-	let txSorted = [];
-	// 不要項目削除
-	txDeepC.forEach((tx) => {
-		const sorted = {};
-		csvSortMore.forEach((key) => {
-			if (tx.hasOwnProperty(key)) {
-				sorted[key] = tx[key];
-			}
-		});
-		txSorted.push(sorted);
-	});
-	// ファイル名を指定してダウンロード
-	csvDownload(txSorted, "flr-csv-more.csv");
 }
