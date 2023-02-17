@@ -196,14 +196,7 @@ function getTx(waddress, allTx, blockNumArr) {
 			});
 			// tx count view
 			numTx.textContent = jsonTxResult.length;
-			if (allTx.length) {
-				getTt(waddress, allTx, blockNumArr);
-			} else {
-				alert("No Transactions.");
-				// loading表示
-				loading.classList.add("pre-load");
-				return false;
-			}
+			getTt(waddress, allTx, blockNumArr);
 		});
 	// FLR balance
 	fetch(`${flareApi}?module=account&action=balance&address=${waddress}`)
@@ -252,7 +245,14 @@ function getTt(waddress, allTx, blockNumArr) {
 			numTt.textContent = ttPeriodCount;
 			// block count view
 			numBl.textContent = blockNumArr.length;
-			allTxAjust(allTx);
+			if (allTx.length) {
+				allTxAjust(allTx);
+			} else {
+				alert("No Transactions.");
+				// loading表示
+				loading.classList.add("pre-load");
+				return false;
+			}
 		});
 }
 
