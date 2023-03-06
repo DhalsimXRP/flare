@@ -320,8 +320,8 @@ function getLogsPrice(allTx) {
 				.then((response) => response.json())
 				.then((jsonDetailTx) => {
 					// dataSourceがtransactions時logsを格納
+					allTx[index].logs = jsonDetailTx.result.logs;
 					if (allTx[index].dataSource == "transactions") {
-						allTx[index].logs = jsonDetailTx.result.logs;
 					}
 					// bitbankから価格取得へ
 					fetch(`${bbPriceUrl}${allTx[index].ymd}`)
@@ -366,10 +366,10 @@ function tableRender(tx) {
 					if (methodId.logAutoClaim.indexOf(logMethodId) !== -1) {
 						tx.Volume = division10p18fixed9(hexConvert(log.data));
 					}
-					// other claim時
+					// other claim時は累計
 					if (methodId.logOhterClaim.indexOf(logMethodId) !== -1) {
 						// console.log(log.data);
-						tx.Volume = division10p18fixed9(hexConvert(log.data.slice(log.data.length - 64)));
+						tx.Volume = tx.Volume + division10p18fixed9(hexConvert(log.data.slice(log.data.length - 64)));
 					}
 				});
 			}
