@@ -1,22 +1,22 @@
-// カラーモード
-const btn = document.querySelector(".mode-btn");
+// color mode btn
+const colorModeBtn = document.querySelector(".mode-btn");
 // チェックした時の挙動
-btn.addEventListener("change", () => {
-	if (btn.checked == true) {
-		// ダークモード
+colorModeBtn.addEventListener("change", () => {
+	if (colorModeBtn.checked == true) {
+		// dark mode
 		document.body.classList.remove("light-theme");
 		document.body.classList.add("dark-theme");
 	} else {
-		// ライトモード
+		// light mode
 		document.body.classList.remove("dark-theme");
 		document.body.classList.add("light-theme");
 	}
 });
 if (window.matchMedia("(prefers-color-scheme: light)").matches == true) {
-	btn.click();
+	colorModeBtn.click();
 }
 
-//// 初期設定
+//// Initial setting
 // bind
 const generate = document.getElementById("generate"),
 	dataTable = document.getElementById("transaction-data"),
@@ -34,9 +34,10 @@ const generate = document.getElementById("generate"),
 	numWFLR = document.getElementById("num-wflr"),
 	numTx = document.getElementById("num-tx"),
 	numTt = document.getElementById("num-tt"),
-	numBl = document.getElementById("num-bl");
+	numBl = document.getElementById("num-bl"),
+	connectWalletBtn = document.getElementById("connect-wallet");
 
-// グローバル変数トランザクション格納用
+// Global vars, array
 let allTx = [],
 	blockNumArr = [],
 	waddress = "",
@@ -48,10 +49,10 @@ let allTx = [],
 const delayMS = 50,
 	delayCount = 20,
 	minDate = "2023-01-10";
-// csv ソート用配列
+// csv sort array
 const csvSort = ["Timestamp", "Action", "Source", "Base", "Volume", "Price", "Counter", "Fee", "FeeCcy", "Comment"];
 const csvSortMore = ["Timestamp", "Method", "Source", "Base", "Volume", "Counter", "Fee", "FeeCcy", "hash", "gas", "gasPrice", "gasUsed", "priceAverage", "FeeJPY", "VolumeJPY"];
-// method判別用obj 要確認
+// method obj
 const methodId = {
 	Claim: ["0xb2c12192", "0xb2af870a"],
 	AutoClaim: ["0x6a761202", "0x8dc305fa"],
@@ -69,7 +70,7 @@ const methodId = {
 	MultiTransfer: ["0x1e89d545", "0x7fb7e3f8"],
 	Transfer: ["0x"],
 };
-// cryptact用action配列
+// cryptact action array
 const actions = ["BUY", "SELL", "PAY", "MINING", "SENDFEE", "REDUCE", "BONUS", "LENDING", "STAKING", "CASH", "BORROW", "RETURN", "LOSS"];
 // API用
 const flareApi = "https://flare-explorer.flare.network/api";
@@ -108,16 +109,16 @@ function endDate() {
 
 // start
 function start() {
-	// 各データリセット
+	// data reset
 	allTx = [];
 	blockNumArr = [];
 	waddress = "";
 	starttimestamp = "";
 	endtimestamp = "";
 
-	// 入力アドレス取得
+	// input wallet address get
 	waddress = inputWaddress.value;
-	// 日付確認
+	// date check
 	let starttimestampValue = inputStartDate.value;
 	let endtimestampValue = inputEndDate.value;
 	if (starttimestampValue) {
@@ -127,27 +128,26 @@ function start() {
 		// console.log(starttimestamp);
 	}
 	if (endtimestampValue) {
-		// console.log(endtimestampValue);　終了は指定日中、unixtimesec１日分追加
+		// console.log(endtimestampValue);　unixtimesec add 1day for end day
 		endUnixtime = convertToUnixTime(endtimestampValue) + 60 * 60 * 24;
 		endtimestamp = "&endtimestamp=" + endUnixtime;
 		// console.log(endtimestamp);
 	}
-	// ウォレット文字数確認
+	// wallet address length
 	if (waddress.length == 42) {
-		// リセット
-		// テーブル初期化
+		// table reset
 		while (dataTable.firstChild) {
 			dataTable.removeChild(dataTable.firstChild);
 		}
 
-		// 数値リセット
+		// num reset
 		numFLR.textContent = "0";
 		numWFLR.textContent = "0";
 		numTx.textContent = "0";
 		numTt.textContent = "0";
 		numBl.textContent = "0";
 
-		// 読込ボタン,日付削除ボタン無効化
+		// button, date, disabled
 		generate.classList.add("btn-secondary");
 		generate.classList.remove("btn-warning");
 		generate.classList.add("disabled");
@@ -158,7 +158,7 @@ function start() {
 		clearEndDate.classList.remove("btn-warning");
 		clearEndDate.classList.add("disabled");
 
-		// ダウンロードボタン無効化
+		// download button disabled
 		dlbtnM.classList.add("btn-secondary");
 		dlbtnM.classList.remove("btn-warning");
 		dlbtnM.classList.add("disabled");
@@ -166,9 +166,9 @@ function start() {
 		dlbtn.classList.remove("btn-warning");
 		dlbtn.classList.add("disabled");
 
-		// loading表示
+		// loading show
 		loading.classList.remove("pre-load");
-		// データ取得へ
+		// Go data get
 		getTx(waddress, allTx, blockNumArr);
 	} else {
 		alert("Wrong address length.\nCheck wallet address.");
@@ -349,7 +349,7 @@ function getLogsPrice(allTx) {
 	getData();
 }
 
-// 一覧表示
+// table render
 function tableRender(tx) {
 	// console.log("tableRender");
 	// console.log(tx);
@@ -527,7 +527,7 @@ function tableRender(tx) {
 	dataTable.prepend(tr);
 }
 
-// token transfer 対象判定
+// token transfer check
 function timeJudge(timeStamp, starTime, endtime) {
 	// 期間未設定
 	if (!starTime && !endtime) {
@@ -561,7 +561,7 @@ function progress(loadIndex, blockNum) {
 	}
 }
 
-// トランザクション取得後 ダウンロードボタンアクティブ化
+// download button enabled after transaction getted
 function dlBtnActive() {
 	// ダウンロードボタン有効化
 	dlbtnM.classList.remove("btn-secondary");
@@ -646,7 +646,7 @@ function csvDownload(obj, fileName) {
 	dlLink.remove();
 }
 
-// 割算
+// division 10 per 18
 function division10p18fixed9(num) {
 	let calc = Number((num / 1000000000).toFixed(9));
 	return Number((calc / 1000000000).toFixed(9));
@@ -683,3 +683,31 @@ function hexConvert(hex) {
 function convertToUnixTime(date) {
 	return Math.floor(new Date(date).getTime() / 1000);
 }
+
+//// Connect Wallet
+window.addEventListener("load", async () => {
+	// Create a Web3 instance
+	const web3 = new Web3(window.ethereum);
+	// Handle click event of the connect button
+	connectWalletBtn.addEventListener("click", async () => {
+		// Check if MetaMask is installed
+		if (typeof window.ethereum === "undefined") {
+			alert("MetaMask is not installed!");
+			return;
+		}
+		try {
+			// Request user permission to connect to their wallet
+			await window.ethereum.request({ method: "eth_requestAccounts" });
+
+			// Get the user's wallet address
+			const accounts = await web3.eth.getAccounts();
+			const address = accounts[0];
+
+			// Display the wallet address
+			inputWaddress.value = address;
+		} catch (error) {
+			alert("Failed to connect to wallet");
+			console.error(error);
+		}
+	});
+});
